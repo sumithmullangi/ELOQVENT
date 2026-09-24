@@ -1,12 +1,31 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { exploreLinks, product } from '../../content/product'
 import { Button } from '../ui/Button'
 
 export function ProductNav() {
   const [open, setOpen] = useState(false)
   const [visible, setVisible] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const timeoutRef = useRef<number | null>(null)
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+    setOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = window.setTimeout(() => {
+      setOpen(false)
+    }, 150)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,10 +34,31 @@ export function ProductNav() {
       setVisible(shouldShow)
     }
 
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false)
+      }
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
     handleScroll()
 
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current)
+      }
+      window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   }, [])
 
   return (
@@ -36,27 +76,47 @@ export function ProductNav() {
               {product.shortName}
             </a>
             <div className="flex items-center gap-2">
-              <div className="relative">
-                <Button variant="ghost" className="h-8 gap-1 px-3 text-[13px]" onClick={() => setOpen((v) => !v)}>
+              <div
+                className="relative"
+                ref={menuRef}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                <Button
+                  variant="ghost"
+                  className="h-8 gap-1 px-3 text-[13px]"
+                  onClick={() => setOpen((v) => !v)}
+                >
                   Explore
-                  <ChevronDown size={14} />
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+                  />
                 </Button>
-                {open ? (
-                  <div className="absolute right-0 top-[calc(100%+8px)] w-52 overflow-hidden rounded-2xl border border-white/10 bg-[#1d1d1f] py-2 shadow-2xl">
-                    {exploreLinks.map((link) => (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setOpen(false)}
-                        className="block px-4 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                ) : null}
+                <AnimatePresence>
+                  {open && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                      transition={{ duration: 0.18, ease: 'easeOut' }}
+                      className="absolute right-0 top-[calc(100%+8px)] w-52 overflow-hidden rounded-2xl border border-white/10 bg-[#1d1d1f]/95 py-2 shadow-2xl backdrop-blur-xl"
+                    >
+                      {exploreLinks.map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setOpen(false)}
+                          className="block px-4 py-2.5 text-sm text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                        >
+                          {link.label}
+                        </a>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              <Button href="#shop" className="h-8 px-4 text-[13px]">
+              <Button href="#tracks" className="h-8 px-4 text-[13px]">
                 Register
               </Button>
             </div>

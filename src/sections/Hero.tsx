@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { useEffect } from 'react'
 import { Section } from '../components/ui/Section'
 
@@ -41,10 +42,15 @@ export function Hero() {
   }, [])
 
   return (
-    <Section id="hero" className="relative pt-10 pb-16 md:pt-16 md:pb-24">
+    <Section id="hero" className="relative pt-8 pb-10 md:pt-14 md:pb-16">
       <div className="relative mx-auto max-w-5xl px-4 text-center select-none">
         {/* Arched ELOQVENT in exact style with no background box or back color */}
-        <div className="mx-auto w-full max-w-[760px] md:max-w-[900px]">
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto w-full max-w-[760px] md:max-w-[900px]"
+        >
           <svg
             viewBox="0 0 1000 230"
             className="w-full h-auto overflow-visible"
@@ -96,11 +102,15 @@ export function Hero() {
               </textPath>
             </text>
           </svg>
-
-        </div>
+        </motion.div>
 
         {/* 2K26 in exact matching font */}
-        <div className="-mt-3 sm:-mt-5 md:-mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="-mt-3 sm:-mt-5 md:-mt-8"
+        >
           <span
             style={{
               fontFamily: "'Extra Innings', 'Russo One', sans-serif",
@@ -110,11 +120,15 @@ export function Hero() {
           >
             2K26
           </span>
-        </div>
-
+        </motion.div>
 
         {/* Sub Tagline */}
-        <div className="mt-8 flex items-center justify-center gap-2.5 sm:gap-4 md:mt-10 md:gap-5">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-8 flex items-center justify-center gap-2.5 sm:gap-4 md:mt-10 md:gap-5"
+        >
           <span className="font-display text-xs font-bold uppercase tracking-[0.24em] text-neutral-300 sm:text-sm md:text-base lg:text-lg">
             Tech
           </span>
@@ -126,7 +140,7 @@ export function Hero() {
           <span className="font-display text-xs font-bold uppercase tracking-[0.24em] text-neutral-300 sm:text-sm md:text-base lg:text-lg">
             Triumph
           </span>
-        </div>
+        </motion.div>
       </div>
     </Section>
   )

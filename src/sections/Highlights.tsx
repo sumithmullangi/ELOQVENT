@@ -38,8 +38,8 @@ export function Highlights() {
 
 
   return (
-    <Section id="highlights" tone="stage" className="py-16 md:py-24">
-      <h2 className="mb-10 text-center text-[40px] font-semibold tracking-tight text-white md:text-[56px]">
+    <Section id="highlights" tone="stage" className="py-12 md:py-16">
+      <h2 className="mb-8 text-center text-[40px] font-semibold tracking-tight text-white md:text-[56px]">
         Get the highlights.
       </h2>
       <div

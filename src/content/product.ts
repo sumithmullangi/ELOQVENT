@@ -24,11 +24,11 @@ export const navLinks = [
 ]
 
 export const exploreLinks = [
-  { label: 'Highlights', href: '#highlights' },
-  { label: 'Event brief', href: '#upgrade' },
+  { label: 'Event Brief', href: '#tracks' },
   { label: 'Elocution', href: '#camera' },
-  { label: 'Root riddle', href: '#performance' },
-  { label: 'Contact', href: '#values' },
+  { label: 'Root Riddles', href: '#aperture' },
+  { label: 'Key Takeaways', href: '#gains' },
+  { label: 'Highlights', href: '#highlights' },
 ]
 
 
